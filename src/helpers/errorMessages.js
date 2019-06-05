@@ -1,0 +1,1 @@
+export const MAX_PLAYERS = 'Players amount exceeded for this game. Please try again later.'
