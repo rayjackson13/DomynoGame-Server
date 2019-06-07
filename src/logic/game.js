@@ -37,7 +37,8 @@ class Game {
         const player = this.players.filter(val => val && val.id === idPlayer)[0]
         this.moves.push({
             player,
-            position
+            position,
+            vertical
         })
     }
 
@@ -56,15 +57,18 @@ class Game {
        
         // check if places are empty
         if (grid.getItem(position) || grid.getItem(secPos)) {
-            throw new Error("Fuck you!")
+            throw new Error('Fuck you!')
         }
 
         grid.setItem(position)
         grid.setItem(secPos)
 
         // TODO: check if there are other possible combinations
-
-        return grid.getGrid()
+        const gameEnded = !grid.checkMoves()
+        return {
+            grid: grid.getGrid(),
+            full: gameEnded
+        }
     }
 }
 

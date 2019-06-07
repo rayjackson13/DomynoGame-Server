@@ -79,13 +79,13 @@ export const handleGame = (app) => {
 
     app.post('/grid/domino', ({ body }, res) => {
         // put a domino in position
-        // const { position: { x, y }, idPlayer } = req.body
+        // const { position: { x, y }, idPlayer, vertical } = req.body
         try {
-            const result = game.putDomino(body)
+            const { grid, full } = game.putDomino(body)
             game.addMove(body)
             return res.status(200).send({
-                msg: 'Success.',
-                grid: result
+                msg: full ? 'Bitch, it\'s over!' : 'Success.',
+                grid: grid
             })
         } catch (e) {
             console.error(e)
