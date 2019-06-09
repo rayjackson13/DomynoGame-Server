@@ -1,21 +1,41 @@
+import getMoveSequence from '../helpers/getMoveSequence'
+
 class Grid {
-    constructor(w, h) {
+    constructor(w, h, options) {
         if (typeof w === 'number' && typeof h === 'number') {
             this.width = w
             this.height = h
-            this.setGridMatrix()
+            this.grid = options && options.grid 
+                ? options.grid 
+                : this.setGridMatrix()
         }
+    }
+
+    copy = () => {
+        const { width, height, grid } = this
+        const gridCopy = new Array(width)
+        for (let i = 0; i < width; i++) {
+            gridCopy[i] = new Array(height)
+            for (let j = 0; j < height; j++) {
+                gridCopy[i][j] = grid[i][j]
+            }
+        }
+
+        return new Grid(width, height, {
+            grid: gridCopy
+        })
     }
 
     setGridMatrix = () => {
         const { width, height } = this
-        this.grid = new Array(width)
+        const grid = new Array(width)
         for (let i = 0; i < width; i++) {
-            this.grid[i] = new Array(height)
+            grid[i] = new Array(height)
             for (let j = 0; j < height; j++) {
-                this.grid[i][j] = 0
+                grid[i][j] = 0
             }
         }
+        return grid
     }
 
     getSize = () => {
@@ -37,17 +57,55 @@ class Grid {
 
     checkMoves = () => {
         const { width, height } = this.getSize()
-        for (let i = 0; i < width - 1; i++) {
-            for (let j = 0; j < height - 1; j++) {
-                if (!this.getItem({ x: j, y: i }) && !this.getItem({ x: j + 1, y: i })) {
+        for (let i = 0; i < width; i++) {
+            for (let j = 0; j < height; j++) {
+                if (j < width - 1 && !this.getItem({ x: j, y: i }) && !this.getItem({ x: j + 1, y: i })) {
                     return true
                 }
-                if (!this.getItem({ x: j, y: i }) && !this.getItem({ x: j, y: i + 1 })) {
+                if (i < height - 1 && !this.getItem({ x: j, y: i }) && !this.getItem({ x: j, y: i + 1 })) {
                     return true
                 }
             }
         }
         return false
+    }
+
+    getMoves = () => {
+        const moves = []
+        const { width, height } = this.getSize()
+        for (let i = 0; i < width; i++) {
+            for (let j = 0; j < height; j++) {
+                const options = {
+                    position: { x: j, y: i },
+                    grid: this.copy(),
+                    aiMove: true,
+                    moves
+                }
+
+                if (j < width - 1 && !this.getItem({ x: j, y: i }) && !this.getItem({ x: j + 1, y: i })) {
+                    moves.push(getMoveSequence({
+                        ...options,
+                        vertical: false
+                    }))
+                }
+                if (i < height - 1 && !this.getItem({ x: j, y: i }) && !this.getItem({ x: j, y: i + 1 })) {
+                    moves.push(getMoveSequence({
+                        ...options,
+                        vertical: true
+                    }))
+                }
+            }
+        }
+
+        return moves
+    }
+
+    print = () => {
+        console.log('Grid: [')
+        for (let row of this.grid) {
+            console.log(`[ ${ row } ]`)
+        }
+        console.log('].')
     }
 }
 

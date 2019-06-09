@@ -70,6 +70,10 @@ class Game {
             full: gameEnded
         }
     }
+
+    getPossibleMoves = () => {
+        return this.getGrid().getMoves()
+    }
 }
 
 export default Game

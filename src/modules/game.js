@@ -83,6 +83,7 @@ export const handleGame = (app) => {
         try {
             const { grid, full } = game.putDomino(body)
             game.addMove(body)
+            game.getPossibleMoves()
             return res.status(200).send({
                 msg: full ? 'Bitch, it\'s over!' : 'Success.',
                 grid: grid
