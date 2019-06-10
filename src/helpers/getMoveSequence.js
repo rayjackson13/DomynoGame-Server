@@ -1,11 +1,44 @@
-const getMoveSequence = ({ moves, grid, position, vertical = false, aiMove }) => {
-    grid.print()
-    console.log(position, vertical, aiMove, '\n')
-    const furtherMoves = grid.getMoves()
-    if (furtherMoves.length) {
-        moves.push(furtherMoves)
+const getMoveSequences = ({ grid, aiMove = true }) => {
+    const moves = []
+    if (!grid.checkMoves()) {
+        return moves
+    }
+    const { width, height } = grid.getSize()
+    for (let i = 0; i < height; i++) {
+        for (let j = 0; j < width; j++) {            
+            if (j < width - 1 && !grid.getItem({ x: j, y: i }) && !grid.getItem({ x: j + 1, y: i })) {
+                const copyGrid = grid.copy()
+                copyGrid.setItem({ x: j, y: i })
+                copyGrid.setItem({ x: j + 1, y: i })
+                moves.push({
+                    position: { x: j, y: i },
+                    vertical: false,
+                    grid: copyGrid.getGrid(),
+                    aiMove,
+                    furtherMoves: getMoveSequences({
+                        grid: copyGrid,
+                        aiMove: !aiMove
+                    }),
+                })
+            }
+            if (i < height - 1 && !grid.getItem({ x: j, y: i }) && !grid.getItem({ x: j, y: i + 1 })) {
+                const copyGrid = grid.copy()
+                copyGrid.setItem({ x: j, y: i })
+                copyGrid.setItem({ x: j, y: i + 1 })
+                moves.push({
+                    position: { x: j, y: i },
+                    vertical: true,
+                    grid: copyGrid.getGrid(),
+                    aiMove,
+                    furtherMoves: getMoveSequences({
+                        grid: copyGrid,
+                        aiMove: !aiMove
+                    }),
+                })
+            }
+        }
     }
     return moves
 }
 
-export default getMoveSequence
+export default getMoveSequences
