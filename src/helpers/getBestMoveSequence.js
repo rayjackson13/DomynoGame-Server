@@ -18,14 +18,56 @@ const isWinning = ({ furtherMoves, aiMove }) => {
     return aiMove
 }
 
-const getBestMove = (moves) => {
-    let bestMove = JSON.parse(JSON.stringify(moves[0]))
-    let node
-    for (node = bestMove; node.furtherMoves.length; node = node.furtherMoves[0]) {
-        node.furtherMoves = [ node.furtherMoves[0] ]
+const getBestMove = moves => {
+    const bestNode = getBestNode(moves)
+
+    return bestNode
+}
+
+const getBestNode = moves => {
+    const { bestNode } = arrayMinDepth(moves)
+
+    if (!bestNode) {
+        return
     }
-    console.log(bestMove)
-    return bestMove
+
+    if (!bestNode.furtherMoves || !bestNode.furtherMoves.length) {
+        return bestNode
+    }
+
+    let currentChildren = bestNode.furtherMoves.splice(0, bestNode.furtherMoves.length)
+    bestNode.furtherMoves = [ getBestNode(currentChildren) ]
+    return bestNode
+}
+
+const minimumDepth = root => {
+    if (!root) {
+        return 0
+    }
+
+    if (!root.furtherMoves.length) {
+        return 1
+    }
+
+    let childrenDepths = []
+    for (let node of root.furtherMoves) {
+        childrenDepths.push(minimumDepth(node))
+    }
+
+    return Math.min(...childrenDepths) + 1
+}
+
+const arrayMinDepth = array => {
+    let minDepth = Infinity
+    let bestNode
+    for (let tree of array) {
+        const treeDepth = minimumDepth(tree)
+        if (treeDepth < minDepth) {
+            minDepth = treeDepth
+            bestNode = tree
+        }
+    }
+    return { minDepth, bestNode }
 }
 
 export default getBestMoveSequence

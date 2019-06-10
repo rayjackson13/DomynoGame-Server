@@ -1,5 +1,6 @@
 import Game from '../logic/game'
 let game
+let model
 
 export const handleGame = (app) => {
     app.post('/game', (req, res) => {
@@ -81,10 +82,16 @@ export const handleGame = (app) => {
         // put a domino in position
         // const { position: { x, y }, idPlayer, vertical } = req.body
         try {
-            const { grid, full } = game.putDomino(body)
+            let full = game.putDomino(body).full
+            let grid
             game.addMove(body)
             const moves = game.getPossibleMoves()
-            console.log(moves)
+            if (!full) {
+                const aiMove = game.putDomino(moves)
+                full = aiMove.full
+                grid = aiMove.grid
+            }
+            
             return res.status(200).send({
                 msg: full ? 'Bitch, it\'s over!' : 'Success.',
                 grid: grid,
@@ -97,4 +104,8 @@ export const handleGame = (app) => {
             })
         }
     }) 
+
+    app.post('/game/ai', (res, req) => {
+
+    })
 }

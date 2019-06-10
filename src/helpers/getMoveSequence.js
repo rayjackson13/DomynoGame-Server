@@ -1,4 +1,4 @@
-const getMoveSequences = ({ grid, aiMove = true }) => {
+const getMoveSequences = ({ grid, aiMove = false }) => {
     const moves = []
     if (!grid.checkMoves()) {
         return moves
