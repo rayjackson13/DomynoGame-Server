@@ -36,7 +36,7 @@ class Grid {
                 grid[i][j] = 0
             }
         }
-        console.log(`Grid initiated.\n${ grid }`)
+        // console.log(`Grid initiated.\n${ grid }`)
         return grid
     }
 

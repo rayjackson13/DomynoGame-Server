@@ -1,6 +1,8 @@
+import * as tf from '@tensorflow/tfjs'
 import Game from '../logic/game'
+import Model from '../logic/model'
+import generateRandomMatrixInput from '../helpers/generateRandomMatrixInput'
 let game
-let model
 
 export const handleGame = (app) => {
     app.post('/game', (req, res) => {
@@ -86,11 +88,11 @@ export const handleGame = (app) => {
             let grid
             game.addMove(body)
             const moves = game.getPossibleMoves()
-            if (!full) {
-                const aiMove = game.putDomino(moves)
-                full = aiMove.full
-                grid = aiMove.grid
-            }
+            // if (!full) {
+            //     const aiMove = game.putDomino(moves)
+            //     full = aiMove.full
+            //     grid = aiMove.grid
+            // }
             
             return res.status(200).send({
                 msg: full ? 'Bitch, it\'s over!' : 'Success.',
@@ -105,7 +107,12 @@ export const handleGame = (app) => {
         }
     }) 
 
-    app.post('/game/ai', (res, req) => {
-
+    app.post('/game/ai', () => {
+        const model = new Model()
+        model.addLayer({ units: 1, batchInputShape: [ 3, 4 ] })
+        model.compile()
+        model.train(() => {
+            model.predict(tf.tensor2d(game.getGrid().getGrid()))
+        })
     })
 }

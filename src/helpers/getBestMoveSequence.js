@@ -1,10 +1,10 @@
 const getBestMoveSequence = (moves) => {
     const winningMoves = moves.filter(val => isWinning(val))
-    console.log('Winning moves:')
-    console.table(winningMoves)
+    // console.log('Winning moves:')
+    // console.table(winningMoves)
 
     const bestMove = getBestMove(winningMoves)
-    console.log('Best move:', bestMove)
+    // console.log('Best move:', bestMove)
     return bestMove
 }
 
