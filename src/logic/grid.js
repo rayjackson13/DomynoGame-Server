@@ -45,8 +45,8 @@ class Grid {
         return { width, height }
     }
 
-    setItem = ({ x, y }) => {
-        this.grid[y][x] = 1
+    setItem = ({ x, y }, value = 1) => {
+        this.grid[y][x] = value === 0 ? 1 : value
     }
 
     getItem = ({ x, y }) => {

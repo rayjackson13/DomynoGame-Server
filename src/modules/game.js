@@ -89,7 +89,9 @@ export const handleGame = (app) => {
                 throw {
                     status: 200,
                     message: 'Game\'s over!',
-                    grid: grid
+                    grid,
+                    full,
+                    winner: 'player'
                 }
             }
             const aiMove = game.getPossibleMoves()
@@ -99,7 +101,9 @@ export const handleGame = (app) => {
 
             return res.status(200).send({
                 msg: isFinished ? 'Game\'s over!' : 'Success.',
-                grid: newGrid
+                grid: newGrid,
+                full: isFinished,
+                winner: isFinished ? 'ai' : undefined
             })
         } catch ({ status = 400, message, grid }) {
             console.error({ status, message, grid })
