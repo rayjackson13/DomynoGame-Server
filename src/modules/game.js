@@ -105,11 +105,13 @@ export const handleGame = (app) => {
                 full: isFinished,
                 winner: isFinished ? 'ai' : undefined
             })
-        } catch ({ status = 400, message, grid }) {
-            console.error({ status, message, grid })
+        } catch ({ status = 400, message, grid, full, winner }) {
+            console.error({ status, message, grid, full, winner })
             return res.status(status).send({
                 msg: message,
-                grid: grid
+                grid,
+                full,
+                winner
             })
         }
     }) 
