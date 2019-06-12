@@ -1,6 +1,7 @@
 import path from 'path'
 import express from 'express'
 import bodyParser from 'body-parser'
+import cors from 'cors'
 import { handleGame } from './modules/game'
 
 const app = express()
@@ -17,9 +18,10 @@ app.get('/', (req, res) => {
 
 handleGame(app)
 
-app.use((err, req, res, next) => {
-    console.error(err)
-    res.status(401).send(err.message)
+app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+    next()
 })
 
 app.listen(PORT)

@@ -1,5 +1,5 @@
 import getMoveSequences from '../helpers/getMoveSequence'
-import getBestMoveSequence from '../helpers/getBestMoveSequence'
+import getBestMove from '../helpers/getBestMove'
 
 class Grid {
     constructor(w, h, options) {
@@ -72,45 +72,35 @@ class Grid {
         return false
     }
 
-    // getMoves = (aiMove = true) => {
-    //     const moves = []
-    //     const { width, height } = this.getSize()
-    //     for (let i = 0; i < height; i++) {
-    //         for (let j = 0; j < width; j++) {
-    //             const options = {
-    //                 position: { x: j, y: i },
-    //                 grid: this.copy(),
-    //                 aiMove: aiMove,
-    //                 moves
-    //             }
-
-    //             if (j < width - 1 && !this.getItem({ x: j, y: i }) && !this.getItem({ x: j + 1, y: i })) {
-    //                 // do smth thoughtful here
-    //                 moves.push(getMoveSequence({
-    //                     ...options,
-    //                     vertical: false
-    //                 }))
-    //             }
-    //             if (i < height - 1 && !this.getItem({ x: j, y: i }) && !this.getItem({ x: j, y: i + 1 })) {
-    //                 moves.push(getMoveSequence({
-    //                     ...options,
-    //                     vertical: true
-    //                 }))
-    //             }
-    //         }
-    //     }
-
-    //     return moves
-    // }
-
     getMoves = () => {
         const moves = []
         const moveSequences = getMoveSequences({
             grid: this.copy(),
             moves
         })
-        const bestMove = getBestMoveSequence(moveSequences)
+        const bestMove = getBestMove(moveSequences)
         return bestMove
+    }
+
+    countFurtherMoves = () => {
+        let result = 0
+        const grid = this.copy()
+        const { width, height } = grid.getSize()
+        for (let i = 0; i < height; i++) {
+            for (let j = 0; j < width; j++) {
+                if (j < width - 1 && !grid.getItem({ x: j, y: i }) && !grid.getItem({ x: j + 1, y: i })) {
+                    grid.setItem({ x: j, y: i })
+                    grid.setItem({ x: j + 1, y: i })
+                    result++
+                }
+                if (i < height - 1 && !grid.getItem({ x: j, y: i }) && !grid.getItem({ x: j, y: i + 1 })) {
+                    grid.setItem({ x: j, y: i })
+                    grid.setItem({ x: j, y: i + 1 })
+                    result++
+                }
+            }
+        }
+        return result
     }
 
     print = () => {

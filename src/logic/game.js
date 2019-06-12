@@ -42,7 +42,7 @@ class Game {
         })
     }
 
-    putDomino = ({ position, idPlayer, vertical = false }) => {
+    putDomino = ({ position, vertical = false }) => {
         const grid = this.getGrid()
         const { width, height } = grid.getSize()
         const { x, y } = position
@@ -57,7 +57,7 @@ class Game {
        
         // check if places are empty
         if (grid.getItem(position) || grid.getItem(secPos)) {
-            throw new Error('Fuck you!')
+            throw new Error('This position is already taken!')
         }
 
         grid.setItem(position)

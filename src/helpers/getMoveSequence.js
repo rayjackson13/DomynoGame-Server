@@ -1,3 +1,6 @@
+/**
+ * Get an array of all possible moves
+ */
 const getMoveSequences = ({ grid, aiMove = false }) => {
     const moves = []
     if (!grid.checkMoves()) {
@@ -13,12 +16,8 @@ const getMoveSequences = ({ grid, aiMove = false }) => {
                 moves.push({
                     position: { x: j, y: i },
                     vertical: false,
-                    grid: copyGrid.getGrid(),
-                    aiMove,
-                    furtherMoves: getMoveSequences({
-                        grid: copyGrid,
-                        aiMove: !aiMove
-                    }),
+                    grid: copyGrid,
+                    aiMove
                 })
             }
             if (i < height - 1 && !grid.getItem({ x: j, y: i }) && !grid.getItem({ x: j, y: i + 1 })) {
@@ -28,12 +27,8 @@ const getMoveSequences = ({ grid, aiMove = false }) => {
                 moves.push({
                     position: { x: j, y: i },
                     vertical: true,
-                    grid: copyGrid.getGrid(),
-                    aiMove,
-                    furtherMoves: getMoveSequences({
-                        grid: copyGrid,
-                        aiMove: !aiMove
-                    }),
+                    grid: copyGrid,
+                    aiMove
                 })
             }
         }
