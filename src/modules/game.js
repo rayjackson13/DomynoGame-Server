@@ -1,7 +1,9 @@
 import * as tf from '@tensorflow/tfjs'
 import Game from '../logic/game'
 import Model from '../logic/model'
+import BotFactory from '../logic/bot/BotFactory'
 let game
+let bot
 
 export const handleGame = (app) => {
     app.post('/game', (req, res) => {
@@ -27,6 +29,7 @@ export const handleGame = (app) => {
                 }
             }
             game.start(width, height)
+            bot = BotFactory(game)
             return res.status(200).send({
                 msg: 'Game started. Grid initialized.',
                 grid: game.getGrid(),
@@ -94,8 +97,9 @@ export const handleGame = (app) => {
                     winner: 'player'
                 }
             }
-            const aiMove = game.getPossibleMoves()
+            const aiMove = bot.makeMove()
             aiMove.idPlayer = -1
+            console.log('game')
             const { grid: newGrid, full: isFinished } = game.putDomino(aiMove)
             game.addMove(aiMove)
 

@@ -27,13 +27,13 @@ class Model {
             const move = grid.getMoves()
             // console.log(grid)
             const xs = tf.tensor2d(grid.getGrid())
-            console.log(move.position.x, move.position.y, move.vertical ? 1 : 0)
+            // console.log(move.position.x, move.position.y, move.vertical ? 1 : 0)
             const ys = tf.tensor1d([ move.position.x, move.position.y, move.vertical ? 1 : 0 ])
             const h = await this.model.fit(xs, ys, {
                 batchSize: 4,
                 epochs: 3
             })
-            console.log(h.history.loss[0])
+            // console.log(h.history.loss[0])
         }
         callback && callback()
     }

@@ -59,6 +59,7 @@ class Grid {
 
     checkMoves = () => {
         const { width, height } = this.getSize()
+        // console.log(this.getGrid())
         for (let i = 0; i < height; i++) {
             for (let j = 0; j < width; j++) {
                 if (j < width - 1 && !this.getItem({ x: j, y: i }) && !this.getItem({ x: j + 1, y: i })) {

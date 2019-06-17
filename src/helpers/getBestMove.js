@@ -9,7 +9,7 @@ const getBestMove = (moves) => {
             bestMove = move
         }
     }
-    console.log(bestMove, bestCount)
+    // console.log(bestMove, bestCount)
     if (!bestMove) {
         return moves[0]
     }

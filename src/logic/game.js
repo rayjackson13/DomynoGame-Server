@@ -42,6 +42,10 @@ class Game {
         })
     }
 
+    getMoves = () => {
+        return this.moves
+    }
+
     putDomino = ({ position, vertical = false, idPlayer: playerId }) => {
         const grid = this.getGrid()
         const { width, height } = grid.getSize()
